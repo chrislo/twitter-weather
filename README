@@ -1,0 +1,67 @@
+This is a basic proof-of-concept twitter application for finding
+weather-related tweets with geo-tag information.
+
+Installation
+------------
+
+Install the ruby gems listed in the Gemfile
+
+   gem install tweetstream json trollop
+
+Usage
+-----
+
+To print a list of weather-related tweets which have geo-tag
+information to the console
+
+   ruby streamer.rb -u TWITTER_USERNAME -p TWITTER_PASSWORD
+
+Configuration
+-------------
+
+streamer.rb uses the twitter streaming API's "filter" method with a
+list of weather-related keywords
+
+   weather_words = %w(weather snow wind rain sun hot cold dry wet)
+
+You can have up to 200 words in this list, just edit the code and re-start. 
+
+Todo
+----
+
+This script is dumb. What I wanted to do was hook it up to a less
+rate-limited stream and train a Baysian classifier to identify
+weather-related tweets. Since only a small percentage of tweets have
+geo-tag information, and an even smaller percentage still mention
+weather-related topics there just wasn't enough data to make it
+worth-while. The simple list of keywords works better.
+
+The simple architecture I had in my head used the file-system as a message queue:
+
+  streamer looks for geo-tagged tweets (in english) and puts them in a directory 
+
+  a filter script uses the
+  "Classifier":http://classifier.rubyforge.org/ gem with two
+  directories of "good" (weather related) and "bad" (other) tweets to
+  train it.
+
+  filter watches the directory of candidate tweets and applies the
+  classification rules moving the good tweets to somewhere else
+
+  A (web) front end displays the weather-related tweets on a map (with
+  links to help train the filter).
+
+Anyway, an experiement for another day. If you fancy trying this, see
+my "sourceclassifier":http://github.com/chrislo/sourceclassifier gem
+for an example of using Classifier.
+
+Fun things to try
+-----------------
+
+It'd be fun to:
+
+ - put the tweets on a map
+ - replace keywords with symbols (sun-shine, snow etc). 
+ - match up weather with events happening in that location
+ - compare tweets with "official" weather forecasts for the location
+
